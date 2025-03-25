@@ -37,8 +37,7 @@ public class RobotContainer {
 	// THE MOVE CONTROLLER MUST BE SET TO D-PAD
 	// THE NOTE CONTROLLER MUST BE SET TO XBOX
 
-	Joystick moveController = new Joystick(0);
-	XboxController noteController = new XboxController(1);
+	XboxController controller = new XboxController(0);
 
 	public RobotContainer() {
 		configureButtonBindings();
@@ -46,34 +45,31 @@ public class RobotContainer {
 		m_robotDrive.setDefaultCommand(
 			new RunCommand(
 				() -> {
-					if (!moveController.getName().contains("Logitech")) moveController = new Joystick(1);
-					if (noteController.getName().contains("Logitech")) noteController = new XboxController(0);
-
 					m_robotDrive.drive(
-						-MathUtil.applyDeadband(moveController.getY(), OIConstants.kDriveDeadband),
-						-MathUtil.applyDeadband(moveController.getX(), OIConstants.kDriveDeadband),
-						-MathUtil.applyDeadband(moveController.getRawAxis(2), OIConstants.kDriveDeadband),
+						-MathUtil.applyDeadband(controller.getLeftY(), OIConstants.kDriveDeadband),
+						-MathUtil.applyDeadband(controller.getLeftX(), OIConstants.kDriveDeadband),
+						-MathUtil.applyDeadband(controller.getRightX(), OIConstants.kDriveDeadband),
 						true, true
 					);
 
 					//Double slowNote = 0.25;
 					Double fastNote = 0.55;
 
-					floorSuck.set(noteController.getYButton() ? 0.5 : (noteController.getAButton() ? -0.5 : 0));
+					floorSuck.set(controller.getYButton() ? 0.5 : (controller.getAButton() ? -0.5 : 0));
 
-					armSuck.set(noteController.getXButton() ? 0.4 : (noteController.getYButton() ? -0.4 : 0));
+					armSuck.set(controller.getXButton() ? 0.4 : (controller.getYButton() ? -0.4 : 0));
 
-					armShoot0.set(noteController.getBButton() ? -fastNote : 0);
-					armShoot1.set(noteController.getBButton() ? -fastNote : 0);
+					armShoot0.set(controller.getBButton() ? -fastNote : 0);
+					armShoot1.set(controller.getBButton() ? -fastNote : 0);
 
 					//System.out.println(armMove0.getEncoder().getPosition());
 
-					if (armMove0.getEncoder().getPosition() < 8 && noteController.getLeftY() < -0.3) {
-						armMove0.set(noteController.getLeftY() * -0.3);
-						armMove1.set(noteController.getLeftY() * 0.3);
+					if (armMove0.getEncoder().getPosition() < 8 && controller.getLeftY() < -0.3) {
+						armMove0.set(controller.getLeftY() * -0.3);
+						armMove1.set(controller.getLeftY() * 0.3);
 					} else {
-						armMove0.set(noteController.getLeftTriggerAxis() > 0.5 ? 0.3 : (noteController.getRightTriggerAxis() > 0.5 ? -0.3 : 0));
-						armMove1.set(noteController.getLeftTriggerAxis() > 0.5 ? -0.3 : (noteController.getRightTriggerAxis() > 0.5 ? 0.3 : 0));
+						armMove0.set(controller.getLeftTriggerAxis() > 0.5 ? 0.3 : (controller.getRightTriggerAxis() > 0.5 ? -0.3 : 0));
+						armMove1.set(controller.getLeftTriggerAxis() > 0.5 ? -0.3 : (controller.getRightTriggerAxis() > 0.5 ? 0.3 : 0));
 					}
 					// Y = front arm and back arm shoot/suck
 					// B = back arm shoot/suck
