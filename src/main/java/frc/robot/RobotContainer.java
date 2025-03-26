@@ -64,13 +64,9 @@ public class RobotContainer {
 
 					//System.out.println(armMove0.getEncoder().getPosition());
 
-					if (armMove0.getEncoder().getPosition() < 8 && controller.getLeftY() < -0.3) {
-						armMove0.set(controller.getLeftY() * -0.3);
-						armMove1.set(controller.getLeftY() * 0.3);
-					} else {
-						armMove0.set(controller.getLeftTriggerAxis() > 0.5 ? 0.3 : (controller.getRightTriggerAxis() > 0.5 ? -0.3 : 0));
-						armMove1.set(controller.getLeftTriggerAxis() > 0.5 ? -0.3 : (controller.getRightTriggerAxis() > 0.5 ? 0.3 : 0));
-					}
+					armMove0.set(controller.getLeftTriggerAxis() > 0.5 ? 0.3 : (controller.getRightTriggerAxis() > 0.5 ? -0.3 : 0));
+					armMove1.set(controller.getLeftTriggerAxis() > 0.5 ? -0.3 : (controller.getRightTriggerAxis() > 0.5 ? 0.3 : 0));
+					
 					// Y = front arm and back arm shoot/suck
 					// B = back arm shoot/suck
 					// X = top remove
